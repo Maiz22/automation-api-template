@@ -11,8 +11,8 @@ class User(Base):
     role: Mapped[str] = mapped_column(
         Enum("admin", "user", name="role types"), nullable=False
     )
-    trigger_application_id: Mapped[int] = mapped_column(nullable=True)
-    password_hash: Mapped[str] = mapped_column(String(255))
+    trigger_app_id: Mapped[str] = mapped_column(nullable=True)
+    password_hash: Mapped[str] = mapped_column(String(255), nullable=True)
 
     def __repr__(self) -> str:
-        return f"User\nID: {self.id}\nName: {self.name}\nApp ID: {self.trigger_application_id}"
+        return f"User\nID: {self.id}\nName: {self.name}\nApp ID: {self.trigger_app_id}"

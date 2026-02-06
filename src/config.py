@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     db_name: str = Field(..., validation_alias="DB_NAME")
     db_service_name: str = Field(..., validation_alias="DB_SERVICE_NAME")
 
+    jwt_algorithm: str = Field(..., validation_alias="JWT_ALGORITHM")
+    jwt_secret_key: str = Field(..., validation_alias="JWT_SECRET_KEY")
+
+    bootstrap_token: str = Field(..., validation_alias="BOOTSTRAP_TOKEN")
+
     class config:
         env_file = "...env"
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 import jwt
@@ -6,10 +8,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from ..schemas import TokenData
 from ..config import settings
+from ..crud.user import db_get_user_by_id
+from ..dep import get_db
 
 # from ..crud.user import db_get_user_by_id
 from ..models import User
 
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 # OAuth2 instance (scheme) that can be used as dependency to validate the Bearer token.
 # The tokenURL is the path that is used to create the token
@@ -59,7 +65,8 @@ def verify_access_token(token: str, credentials_exception) -> TokenData:
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-) -> Users | None:
+    db: Session = Depends(get_db),
+) -> User | None:
     """
     Takes a bearer token that is required to follow the oauth2_scheme.
     Returns a user instance, if verification and user extraction are successful.
@@ -71,7 +78,7 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = verify_access_token(token, credentials_exception)
-    user = db_get_user_by_id(id=token_data.id)
+    user = db_get_user_by_id(user_id=token_data.id, session=db)
     if user is None:
         raise credentials_exception
     return user
