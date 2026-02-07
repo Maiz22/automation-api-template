@@ -18,9 +18,15 @@ class UserResponse(User):
 
 
 class AdminCreate(User):
+    username: str = Field(min_length=4)
     password: str = Field(min_length=8)
     bootstrap_token: str
 
 
-class TokenData(BaseModel):
+class TokenData:
     id: int
+
+
+class TokenCreate:
+    access_token: str
+    token_type: str

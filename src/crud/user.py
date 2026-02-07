@@ -18,6 +18,11 @@ def db_get_user_by_id(user_id: int, session: Session) -> User | None:
     return session.execute(statement).scalar_one_or_none()
 
 
+def db_get_user_by_username(username: str, session: Session) -> User | None:
+    statement = select(User).where(User.username == username)
+    return session.execute(statement).scalar_one_or_none()
+
+
 def db_get_all_users(session: Session) -> Sequence[User]:
     statement = select(User)
     return session.execute(statement).scalars().all()

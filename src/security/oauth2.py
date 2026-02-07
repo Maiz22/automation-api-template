@@ -63,7 +63,7 @@ def verify_access_token(token: str, credentials_exception) -> TokenData:
     return token_data
 
 
-async def get_current_user(
+def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     db: Session = Depends(get_db),
 ) -> User | None:
